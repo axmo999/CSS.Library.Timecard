@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using SharpCifs.Smb;
 using System.Collections.Generic;
+using System.Collections;
 using System.IO;
 using System.Linq;
 
@@ -153,6 +154,38 @@ namespace CSS.Library.Timecard.DAO
             // コネクション破棄
             txtWrite.Dispose();
             csvWrite.Dispose();
+        }
+
+        /// <summary>
+        /// streamのユーザーリストをList構造体に変換します
+        /// </summary>
+        /// <param name="txtRead"></param>
+        /// <returns></returns>
+        public List<Entity.UserList.User> Users(TextReader txtRead)
+        {
+            // Recordリストを作成します
+            List<Entity.UserList.User> records = new List<Entity.UserList.User>();
+
+            // CSVとして読み込み開始
+            var csvRead = new CsvReader(txtRead);
+
+            // CSVファイル設定
+            // ヘッダーなし
+            csvRead.Configuration.HasHeaderRecord = true;
+            // CsvMapper通りにマッピングする
+            csvRead.Configuration.RegisterClassMap<Entity.UserList.CsvMapper>();
+            // 文字コード設定
+            csvRead.Configuration.Encoding = _encoding;
+
+            // Recordリストに流し込み
+            records = csvRead.GetRecords<Entity.UserList.User>().ToList();
+
+            // コネクション破棄
+            txtRead.Dispose();
+            csvRead.Dispose();
+
+            // List形式で返す
+            return records;
         }
     }
 
