@@ -86,7 +86,7 @@ namespace CSS.Library.Timecard.DAO
 #if DEBUG
             //ローカルIP取得
             List<IPAddress> localadr = this.GetLocalIPAddress();
-            string localIP = localadr[1].ToString();
+            string localIP = localadr[0].ToString();
             properties.SetProperty("jcifs.netbios.laddr", localIP);
             properties.SetProperty("jcifs.smb.client.laddr", localIP);
 #endif
@@ -171,6 +171,7 @@ namespace CSS.Library.Timecard.DAO
         {
             SmbFile smbFile = this.Connect(fileName);
             TextReader txtRead = new StreamReader(smbFile.GetInputStream(), _encoding);
+            smbFile.GetInputStream().Close();
             smbFile.GetInputStream().Dispose();
             return txtRead;
         }
@@ -179,6 +180,7 @@ namespace CSS.Library.Timecard.DAO
         {
             SmbFile smbFile = this.Connect(fileName);
             TextWriter txtWrite = new StreamWriter(smbFile.GetOutputStream(), _encoding);
+            smbFile.GetOutputStream().Close();
             smbFile.GetOutputStream().Dispose();
             return txtWrite;
         }

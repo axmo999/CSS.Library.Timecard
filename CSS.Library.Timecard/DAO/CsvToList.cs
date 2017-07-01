@@ -57,8 +57,9 @@ namespace CSS.Library.Timecard.DAO
 				// Recordリストに流し込み
 				records = csvRead.GetRecords<Timecard.Entity.CsvTimeRecord.Record>().ToList();
 
-				// コネクション破棄
-				smbFile.GetInputStream().Dispose();
+                // コネクション破棄
+                smbFile.GetInputStream().Close();
+                smbFile.GetInputStream().Dispose();
 				txtRead.Dispose();
 				csvRead.Dispose();
 
@@ -124,6 +125,7 @@ namespace CSS.Library.Timecard.DAO
                 csvWrite.WriteRecords(records);
 
                 // コネクション破棄
+                smbFile.GetOutputStream().Close();
                 smbFile.GetOutputStream().Dispose();
                 txtWrite.Dispose();
                 csvWrite.Dispose();
