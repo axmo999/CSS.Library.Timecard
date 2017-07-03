@@ -185,6 +185,11 @@ namespace CSS.Library.Timecard.DAO
             return txtWrite;
         }
 
+        public bool SmbExists(string fileName)
+        {
+            SmbFile smbFile = this.Connect(fileName);
+            return smbFile.Exists();
+        }
 
 
 	}
