@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="2.16.3" />
-    <PackageReference Include="SharpCifs.Std" Version="0.2.8" />
+    <PackageReference Include="SharpCifs.Std" Version="0.2.9" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.3.0" />
   </ItemGroup>
 

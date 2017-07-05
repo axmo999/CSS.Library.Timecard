@@ -29,27 +29,27 @@ namespace CSS.Library.Timecard.DAO
 		/// <summary>
 		/// SMB接続用ドメイン名です
 		/// </summary>
-		//private string _domain = "chubu-ishikai.local";
+		private string _domain = string.Empty;
 
 		/// <summary>
 		/// SMB接続用ユーザー名です
 		/// </summary>
-		private string _user = "localadmin";
+		private string _user = string.Empty;
 
         /// <summary>
         /// SMB接続用パスワードです
         /// </summary>
-        private string _password = "chubu#82OO";
+        private string _password = string.Empty;
 
         /// <summary>
         /// SMBサーバーのIPアドレスです（テスト用）
         /// </summary>
-        private string _uriAdress = "192.168.250.200";
+        private string _uriAdress = string.Empty;
 
         /// <summary>
         /// SMBサーバー接続先フォルダ名です（テスト用）
         /// </summary>
-        private string _folderName = "/share/test/";
+        private string _folderName = string.Empty;
 
 		/// <summary>
 		/// SMBサーバー接続先ファイル名です（テスト用）
@@ -71,6 +71,7 @@ namespace CSS.Library.Timecard.DAO
             _password = props.Password;
             _uriAdress = props.UriAdress;
             _folderName = props.FolderName;
+            _domain = props.Domain;
 
             // 文字化け対策です。
             var provider = System.Text.CodePagesEncodingProvider.Instance;
@@ -83,36 +84,37 @@ namespace CSS.Library.Timecard.DAO
             // Samba接続プロパティ
             SharpCifs.Util.Sharpen.Properties properties = new SharpCifs.Util.Sharpen.Properties();
 
-#if DEBUG
+
             //ローカルIP取得
             List<IPAddress> localadr = this.GetLocalIPAddress();
             string localIP = localadr[0].ToString();
+            //localIP = "192.168.250.47";
             properties.SetProperty("jcifs.netbios.laddr", localIP);
             properties.SetProperty("jcifs.smb.client.laddr", localIP);
-#endif
 
             properties.SetProperty("jcifs.smb.client.useExtendedSecurity", "true");
-			properties.SetProperty("jcifs.smb.lmCompatibility", "3");
-			properties.SetProperty("jcifs.netbios.cachePolicy", "180");
-			// cache timeout: cache names
-			properties.SetProperty("jcifs.netbios.hostname", localhostname);
-			properties.SetProperty("jcifs.netbios.retryCount", "3");
-			properties.SetProperty("jcifs.netbios.retryTimeout", "5000");
-			// Name query timeout
-			properties.SetProperty("jcifs.smb.client.responseTimeout", "10000");
-			// increased for NAS where HDD is off!
+            properties.SetProperty("jcifs.smb.lmCompatibility", "3");
+            properties.SetProperty("jcifs.netbios.cachePolicy", "180");
+            // cache timeout: cache names
+            properties.SetProperty("jcifs.netbios.hostname", localhostname);
+            properties.SetProperty("jcifs.netbios.retryCount", "3");
+            properties.SetProperty("jcifs.netbios.retryTimeout", "5000");
+            // Name query timeout
+            properties.SetProperty("jcifs.smb.client.responseTimeout", "10000");
+            // increased for NAS where HDD is off!
 
-			properties.SetProperty("jcifs.netbios.baddr", "255.255.255.255");
-			properties.SetProperty("jcifs.resolveOrder", "LMHOSTS,BCAST,DNS");
+            properties.SetProperty("jcifs.netbios.baddr", "192.168.250.255");
+            properties.SetProperty("jcifs.resolveOrder", "LMHOSTS,BCAST,DNS");
 
-			//You can store authentication information in SharpCifs.Std.
-			SharpCifs.Config.SetProperty("jcifs.smb.client.username", _user);
-			SharpCifs.Config.SetProperty("jcifs.smb.client.password", _password);
+            //You can store authentication information in SharpCifs.Std.
+            properties.SetProperty("jcifs.smb.client.username", _user);
+            properties.SetProperty("jcifs.smb.client.password", _password);
+            properties.SetProperty("jcifs.smb.client.domain", _domain);
 
-			SharpCifs.Config.SetProperties(properties);
+            SharpCifs.Config.SetProperties(properties);
 		}
 
-        private List<IPAddress> GetLocalIPAddress()
+        public List<IPAddress> GetLocalIPAddress()
         {
             var ipaddress = new List<IPAddress>();
 

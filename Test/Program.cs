@@ -12,10 +12,11 @@ namespace Test
         static void Main(string[] args)
         {
             Config.Properties config = new Config.Properties();
-            config.User = "administrator";
-            config.Password = "chubu#201";
-            config.UriAdress = "192.168.250.200";
-            config.FolderName = "/share/test/";
+            config.User = "localadmin";
+            config.Password = "chubu#82OO";
+            config.UriAdress = "192.168.1.201";
+            config.FolderName = "/wwwroot/Test/Timecard/App_Data/";
+            config.Domain = "chubu-ishikai.local";
 
             SharedFile smbFile = new SharedFile(config);
 
@@ -23,23 +24,23 @@ namespace Test
             TextReader txtRead = smbFile.SmbReader("201706_0043108.txt");
             List<CsvTimeRecord.Record> records = csv.ReadCsv(txtRead);
 
-            string today = DateTime.Now.ToString("yyyy/MM/dd");
+            bool exists = smbFile.SmbExists("201706_0043108.txt");
 
-            string nowtime = DateTime.Now.ToString("HH:mm");
+            //string today = DateTime.Now.ToString("yyyy/MM/dd");
 
-            var recordToday = records.FirstOrDefault(record => record.Date.ToString() == today);
+            //string nowtime = DateTime.Now.ToString("HH:mm");
 
-            int index = records.IndexOf(recordToday);
+            //var recordToday = records.FirstOrDefault(record => record.Date.ToString() == today);
 
-            recordToday.ArrivalTime = nowtime;
+            //int index = records.IndexOf(recordToday);
 
-            records[index] = recordToday;
+            //recordToday.ArrivalTime = nowtime;
 
-            TextWriter txtWrite = smbFile.SmbWriter("201706_0043108.txt");
+            //records[index] = recordToday;
 
-            csv.WriteCsv(txtWrite, records);
+            //TextWriter txtWrite = smbFile.SmbWriter("201706_0043108.txt");
 
-            Console.WriteLine("Hello World!");
+            //csv.WriteCsv(txtWrite, records);
         }
     }
 }

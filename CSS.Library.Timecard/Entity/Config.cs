@@ -21,14 +21,19 @@
             public string Password { get; set; }
 
             ///// <summary>
-            ///// SMBサーバーのIPアドレスです（テスト用）
+            ///// SMBサーバーのIPアドレスです
             ///// </summary>
             public string UriAdress { get; set; }
 
             ///// <summary>
-            ///// SMBサーバー接続先フォルダ名です（テスト用）
+            ///// SMBサーバー接続先フォルダ名です
             ///// </summary>
             public string FolderName { get; set; }
+
+            ///// <summary>
+            ///// SMBサーバー接続先ドメイン名です
+            ///// </summary>
+            public string Domain { get; set; }
         }
     }
 }
